@@ -39,6 +39,7 @@ impl HealthCheck {
 
 pub struct HealthChecker {
     client: Client,
+    #[allow(dead_code)]
     timeout: Duration,
 }
 
@@ -67,7 +68,7 @@ impl HealthChecker {
                 } else {
                     HealthCheck::new_failure(
                         url.to_string(),
-                        format!("HTTP {}", status_code),
+                        format!("HTTP {status_code}"),
                         response_time,
                     )
                 }
@@ -87,7 +88,7 @@ impl HealthChecker {
 
 #[cfg(test)]
 mod health_checker {
-    use super::{HealthCheck, HealthChecker};
+    use super::HealthChecker;
     use std::time::Duration;
 
     #[tokio::test]
@@ -139,7 +140,6 @@ mod health_checker {
 #[cfg(test)]
 mod tests {
     use super::HealthCheck;
-    use super::*;
     use std::time::Duration;
 
     #[test]

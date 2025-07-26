@@ -50,7 +50,7 @@ fn print_results(results: &[HealthCheck]) {
             println!(" Error: {}", error.red());
         }
         if let Some(code) = result.status_code {
-            println!(" Status Code: {}", code);
+            println!(" Status Code: {code}");
         }
 
         println!();

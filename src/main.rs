@@ -1,10 +1,9 @@
 use anyhow::Result;
 use clap::Parser;
 use colored::*;
+use http_health_checker::{HealthCheck, HealthChecker};
 use std::time::Duration;
 use tokio::time;
-use http_health_checker::{HealthCheck, HealthChecker};
-
 
 // A simple HTTP checker ya'll!~
 #[derive(Parser)]
@@ -28,7 +27,6 @@ struct Cli {
     once: bool,
 }
 
-
 fn print_results(results: &[HealthCheck]) {
     println!("\n{}", "Health Check Results".bold().underline());
     println!("{}", "=".repeat(60));
@@ -40,7 +38,8 @@ fn print_results(results: &[HealthCheck]) {
             _ => "yellow",
         };
 
-        println!("{} {} [{} ms] - {}",
+        println!(
+            "{} {} [{} ms] - {}",
             result.status.color(status_color).bold(),
             result.url.cyan(),
             result.response_time_ms,
@@ -78,19 +77,24 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
 
     let urls = if cli.urls.is_empty() {
-        println!("{}", "No URLs provided, using default test URLs ...".yellow());
+        println!(
+            "{}",
+            "No URLs provided, using default test URLs ...".yellow()
+        );
         get_default_urls()
     } else {
         cli.urls
     };
 
-
     let checker = HealthChecker::new(Duration::from_secs(10));
     let interval = Duration::from_secs(cli.interval);
 
-
     println!("{}", "HTTP Health Checker Starting...".green().bold());
-    println!("Checking {} URLs every {} seconds", urls.len(), cli.interval);
+    println!(
+        "Checking {} URLs every {} seconds",
+        urls.len(),
+        cli.interval
+    );
     println!("URLs: {}", urls.join(", ").cyan());
 
     if cli.once {
@@ -118,4 +122,3 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
-

@@ -1,7 +1,7 @@
-use std::time::Duration;
 use chrono::{DateTime, Utc};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct HealthCheck {
@@ -75,7 +75,7 @@ impl HealthChecker {
             Err(e) => {
                 let response_time = start.elapsed();
                 HealthCheck::new_failure(url.to_string(), e.to_string(), response_time)
-            }   
+            }
         }
     }
 
@@ -130,7 +130,6 @@ mod health_checker {
 
         let results = checker.check_all_urls(&urls).await;
 
-
         assert_eq!(results.len(), 2);
         assert_eq!(results[0].status, "UP");
         assert_eq!(results[1].status, "DOWN");
@@ -139,8 +138,8 @@ mod health_checker {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use super::HealthCheck;
+    use super::*;
     use std::time::Duration;
 
     #[test]
